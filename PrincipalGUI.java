@@ -131,13 +131,14 @@ public class PrincipalGUI extends JDialog {
 		}
 	}
 
-	
-
 	private void resetear(double celsius) {
 		textFieldCelsius.setText(Double.toString(celsius));
 		aFahrenheit();
 	}
 
+	/**
+	 * Realiza la transformación de Fahrenheit a Celsius
+	 */
 	private void aCelsius() {
 		try {
 			textFieldCelsius
@@ -152,7 +153,11 @@ public class PrincipalGUI extends JDialog {
 			textFieldFahrenheit.requestFocusInWindow();
 		}
 	}
-
+	
+	/**
+	 * Realiza la transformación de Celsius a Fahrenheit
+	 */
+	
 	private void aFahrenheit() {
 		try {
 			textFieldFahrenheit
@@ -167,11 +172,18 @@ public class PrincipalGUI extends JDialog {
 		}
 	}
 
+	/**
+	 * Actualiza los campos de texto con ambas temperaturas sincronizadas (0
+	 * Celsius, 32 Fahrenheit)
+	 */
 	private void resetear() {
 		textFieldCelsius.setText("0");
 		textFieldFahrenheit.setText("32");
 	}
 
+	/**
+	 * Guarda la temperatura en un fichero y cierra la aplicación
+	 */
 	private void salir() {
 		try {
 			Fichero.guardar(Double.parseDouble(textFieldCelsius.getText()));
