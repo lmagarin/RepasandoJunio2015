@@ -19,6 +19,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class PrincipalGUI extends JDialog {
 
@@ -64,7 +65,7 @@ public class PrincipalGUI extends JDialog {
 				JButton okButton = new JButton("Reset");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						reset();
+						resetear();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -121,12 +122,23 @@ public class PrincipalGUI extends JDialog {
 			textFieldFahrenheit.setColumns(10);
 		}
 		getContentPane().add(buttonPane);
-		recuperarDeFichero();
+		try {
+			resetear(Fichero.recuperar());
+		} catch (IOException e) {
+			JOptionPane
+					.showMessageDialog(this,
+							"No se ha podido recuperar la temperatura del fichero. Error de E/S");
+		}
 	}
 
 	
 
-	protected void aCelsius() {
+	private void resetear(double celsius) {
+		textFieldCelsius.setText(Double.toString(celsius));
+		aFahrenheit();
+	}
+
+	private void aCelsius() {
 		try {
 			textFieldCelsius
 					.setText(Double.toString(Temperatura.aCelsius(Double
@@ -141,7 +153,7 @@ public class PrincipalGUI extends JDialog {
 		}
 	}
 
-	protected void aFahrenheit() {
+	private void aFahrenheit() {
 		try {
 			textFieldFahrenheit
 					.setText(Double.toString(Temperatura.aFahrenheit(Double
@@ -155,24 +167,25 @@ public class PrincipalGUI extends JDialog {
 		}
 	}
 
-	protected void reset() {
+	private void resetear() {
 		textFieldCelsius.setText("0");
 		textFieldFahrenheit.setText("32");
 	}
 
-	protected void salir() {
-		guardarEnFichero();
+	private void salir() {
+		try {
+			Fichero.guardar(Double.parseDouble(textFieldCelsius.getText()));
+		} catch (NumberFormatException e) {
+			JOptionPane
+					.showMessageDialog(
+							this,
+							"No se ha podido guardar. Los grados celsius no son válidos (un número decimal)");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this,
+					"No se ha podido guardar.Error de E/S");
+		}
 		setVisible(false);
 		dispose();
 		System.exit(0);
-	}
-
-	private void guardarEnFichero() {
-		// TODO Auto-generated method stub
-		
-	}
-	private void recuperarDeFichero() {
-		// TODO Auto-generated method stub
-		
 	}
 }
